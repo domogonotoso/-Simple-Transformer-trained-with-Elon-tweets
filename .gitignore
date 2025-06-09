@@ -1,0 +1,43 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# VSCode settings (if you use VSCode)
+.vscode/
+
+# Mac OS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs and results
+*.log
+*.out
+*.tmp
+
+# Model checkpoints and outputs
+checkpoints/
+results/
+
+# Tokenizer cache or transformers-related cache
+tokenizer/
+cache/
+*.cache
+
+# Config
+config.yaml
+
+# Environment / dependency files
+*.env

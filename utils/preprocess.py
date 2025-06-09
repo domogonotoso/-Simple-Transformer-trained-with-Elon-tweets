@@ -1,0 +1,39 @@
+import csv
+import re
+import os
+
+def clean_text(text: str) -> str:
+    """Clean a single line of text."""
+    text = text.lower()
+    text = re.sub(r'http\S+|www\.\S+', '', text)  # fix dot
+    text = re.sub(r'[^a-zA-Z가-힣\s]', '', text)
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+def preprocess(input_csv: str, output_txt: str, min_length: int = 5):
+    """
+    Preprocess Elon Musk tweets from a CSV file.
+
+    Args:
+        input_csv (str): Path to input CSV file with a 'text' field.
+        output_txt (str): Output file path for cleaned text.
+        min_length (int): Minimum length of cleaned line to include.
+    """
+    if not os.path.exists(input_csv):
+        raise FileNotFoundError(f"Input file not found: {input_csv}")
+
+    count = 0
+    with open(input_csv, encoding='utf-8') as f_in, open(output_txt, 'w', encoding='utf-8') as f_out:
+        reader = csv.DictReader(f_in)
+        for row in reader:
+            raw_text = row.get('text', '')
+            if raw_text:
+                cleaned = clean_text(raw_text)
+                if cleaned and len(cleaned) >= min_length:
+                    f_out.write(cleaned + '\n')
+                    count += 1
+
+    print(f"✅ Preprocessing complete. {count} lines written to {output_txt}")
+
+if __name__ == "__main__":
+    preprocess('data/elon_musk_tweets.csv', 'data/processed.txt')
