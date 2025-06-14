@@ -5,9 +5,16 @@ import os
 def clean_text(text: str) -> str:
     """Clean a single line of text."""
     text = text.lower()
-    text = re.sub(r'http\S+|www\.\S+', '', text)  # fix dot
+    text = re.sub(r'http\S+|www\.\S+', '', text)
+    text = re.sub(r'@\w+', '', text)           # Remove mentions
+    text = re.sub(r'#\w+', '', text)           # Remove hashtags
+    text = re.sub(r'&\w+;', '', text)          # Remove HTML entities like &amp;
     text = re.sub(r'[^a-zA-Z가-힣\s]', '', text)
     text = re.sub(r'\s+', ' ', text).strip()
+    
+    if text and not text.endswith('.'):
+        text += '.'
+        
     return text
 
 def preprocess(input_csv: str, output_txt: str, min_length: int = 5):
@@ -29,7 +36,7 @@ def preprocess(input_csv: str, output_txt: str, min_length: int = 5):
             raw_text = row.get('text', '')
             if raw_text:
                 cleaned = clean_text(raw_text)
-                if cleaned and len(cleaned) >= min_length:
+                if cleaned and len(cleaned.split()) >= min_length:
                     f_out.write(cleaned + '\n')
                     count += 1
 

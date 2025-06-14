@@ -57,7 +57,7 @@ GELU
   * Especially during the **early stages of training**, ReLU can suffer from the **"dead neuron" problem**, whereas GELU avoids that with its softer activation curve.
 
 ---
-
+token
 encoding(positive encoding)
 attention
 skip connection
@@ -77,3 +77,60 @@ python
 ✅ Final model saved.
 
 It trained well.
+
+
+
+💬 Enter a prompt: tesla will   
+
+📝 Generated text:
+tesla willbuterin balajis zengjiajuneth had to do a doubletake this is the first nonfake vitalik tweet ive seen inmber seems spacex tesladarve evafoxu muk evafiecha a gailalfaratx teslaownersebay mydogect bocachiciatorbay blueskyklic tesla douglewinenergy dimazeniuk evafoxuini latekeniukinkatto
+
+
+
+```python
+    # Remove mentions, hashtags, HTML entities
+    text = re.sub(r'@\w+', '', text)           
+    text = re.sub(r'#\w+', '', text)           
+    text = re.sub(r'&\w+;', '', text)          
+```
+
+```bash
+    python -m utils.preprocess
+    python -m trainer.train
+    python -m generate.generate
+```
+
+```text
+Refined dataset has more less text tokens than before ones
+Change block size 32 to 16
+  
+```
+
+💬 Enter a prompt: Tesla 
+
+
+📝 Generated text:
+
+Tesla problem is that the passiveindex funds outsource voting to shareholder services companies which are cnn soros interesting account he would be identical emails to like i thought incarceration control civilization if nonkraine how many paper should get at truth which are them is all at all at that are at w i talked to run the public freefall follow or without consciousness solve weak to see anything down to runkraine tons maybe someone asked for at twitter or both scams last night on earth soon as it is all at the
+
+Not word text token, BPE(Byte pair encoding). Because this we can see something that literally not like real words.
+So, let's put text what model learned from processed.txt and give it longer one.
+
+
+
+Data : population of mars is still zero people
+💬 Enter a prompt: population of mars
+📝 Generated text:
+
+population of mars community notes is perfect because he would not be an actual useful orbit with a vital i know its only security did their investment to be even though to drama their career a strong prominent get spacexa should harder to keep things is very risky about raising to hit where were extreme there is impossible and easy of aliens twitter becomesller to keep sign as possible to wish it be who incorrectly the at surfacing the left wing thrott bad at the left wing stuff as the probability the environment those who they cant protect heart
+
+
+
+Dataset : for improved quality of sleep raise head of your bed by about or cm and dont eat hours before bedtime
+💬 Enter a prompt: for improved quality of sleep raise
+📝 Generated text:
+
+for improved quality of sleep raise head of your bed by about or cm and dont eat hours earlier tracking service on twitter and dont impersonation which is neither was set things control access its good at w were some roadster half its own which dont i believe any mistakes on the left are extremely m its only once who died it has its own into that kinetic energy even though nothing be said so sigh me at least a massive escalation by stalker within the difa has sta within micro except people and if at twitter spoke and i
+
+It seemed better and write exactly what they learned. But it is not enough. It doesn't to stop talking and not know where to stop. 
+So I decided to do two ways. First, improve dataset to add punct at eos(end of sentence). Second, do knowledge distillation

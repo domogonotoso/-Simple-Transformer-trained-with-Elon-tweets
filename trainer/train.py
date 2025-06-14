@@ -62,6 +62,9 @@ def evaluate(model, dataloader):
 def train():
     tokenizer = MyTokenizer()
     dataset = TextDataset('data/processed.txt', tokenizer)
+    if len(dataset) == 0:
+        raise ValueError("🚨 Dataset is empty. Check block_size, preprocess length, or tokenization.")
+
 
     val_size = int(len(dataset) * VAL_SPLIT)
     train_size = len(dataset) - val_size
@@ -90,7 +93,7 @@ def train():
             optimizer.step()
 
             total_loss += loss.item()
-            if step % 100 == 0:
+            if step % 50 == 0:
                 print(f"Epoch {epoch+1}, Step {step}, Loss {loss.item():.4f}")
 
         avg_train_loss = total_loss / len(train_loader)
