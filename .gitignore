@@ -36,8 +36,6 @@ tokenizer/
 cache/
 *.cache
 
-# Config
-config.yaml
 
 # Environment / dependency files
 *.env

@@ -11,9 +11,10 @@ class CausalSelfAttention(nn.Module):
 
     def forward(self, x):
         B, T, _ = x.size()
+        # Create a lower triangular mask for causal self-attention
         causal_mask = torch.tril(torch.ones(T, T, device=x.device)).bool()
         attn_output, _ = self.attn(x, x, x, attn_mask=~causal_mask)
-        x = self.ln(x + self.dropout(attn_output))  
+        x = self.ln(x + self.dropout(attn_output))
         return x
 
 class FeedForward(nn.Module):
@@ -30,17 +31,25 @@ class FeedForward(nn.Module):
     def forward(self, x):
         return self.ln(x + self.net(x))
 
+class TransformerBlock(nn.Module):
+    def __init__(self, d_model, n_heads, dropout):
+        super().__init__()
+        self.attn = CausalSelfAttention(d_model, n_heads, dropout)
+        self.ffn = FeedForward(d_model, dropout)
+
+    def forward(self, x):
+        x = self.attn(x)
+        x = self.ffn(x)
+        return x
+
 class GPTMini(nn.Module):
-    def __init__(self, vocab_size, d_model=256, n_heads=4, num_layers=4, max_len=512, dropout=0.1):
+    def __init__(self, vocab_size, d_model=768, n_heads=12, num_layers=6, max_len=512, dropout=0.1):
         super().__init__()
         self.token_embed = nn.Embedding(vocab_size, d_model)
         self.pos_embed = nn.Embedding(max_len, d_model)
 
         self.blocks = nn.ModuleList([
-            nn.Sequential(
-                CausalSelfAttention(d_model, n_heads, dropout),
-                FeedForward(d_model, dropout)
-            )
+            TransformerBlock(d_model, n_heads, dropout)
             for _ in range(num_layers)
         ])
 

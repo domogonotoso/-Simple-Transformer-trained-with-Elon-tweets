@@ -1,0 +1,7 @@
+batch_size: 32
+block_size: 16
+epochs: 500
+learning_rate: 3e-4
+temperature: 0.3
+top_k: 1
+alpha: 0.5
